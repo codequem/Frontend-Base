@@ -306,4 +306,87 @@ npm create vite@6 analysis
     app.mount('#app');
     ```
 
-    
+
+# step 7 引入 axios 依赖
+
+- 安装 axios
+
+  ``` bash
+  npm install axios
+  ```
+
+- 创建统一的请求模块
+
+- 在 src 下新建 utils/request.ts
+
+  ``` js
+  import axios from 'axios'
+  
+  const request = axios.create({
+    baseURL: import.meta.env.VITE_API_BASE_URL || '/api', // 从环境变量读取，默认 /api
+    timeout: 10000
+  })
+  
+  // 请求拦截器（可选）
+  request.interceptors.request.use(
+    config => {
+      // 可以在这里添加 token 等
+      return config
+    },
+    error => Promise.reject(error)
+  )
+  
+  // 响应拦截器（可选）
+  request.interceptors.response.use(
+    response => response.data, // 直接返回 data，简化使用
+    error => Promise.reject(error)
+  )
+  
+  export default request
+  ```
+
+- 在项目根目录创建 .env.development 文件，用于开发环境配置：
+
+  ``` tex
+  VITE_API_BASE_URL = http://localhost:7000
+  ```
+
+
+# Step 8 引入 Pinia 依赖
+
+- 安装 pinia
+
+  ``` bash
+  npm install pinia
+  ```
+
+- 在 src/main.ts 中注册 Pinia
+
+  ```js
+  import { createApp } from 'vue'
+  import { createPinia } from 'pinia'
+  import './tailwind.css'
+  import App from './App.vue'
+  import router from './router'
+  
+  const app = createApp(App);
+  const pinia = createPinia();
+  app.use(pinia);
+  app.use(router);
+  app.mount('#app');
+  ```
+
+# Step 9  引入 DaisyUI 依赖
+
+- 安装 DaisyUI
+
+  ```bash
+  npm install -D daisyui
+  ```
+
+- 在 tailwind.css 中注册
+
+  ```css
+  @import "tailwindcss";
+  @plugin "daisyui";
+  ```
